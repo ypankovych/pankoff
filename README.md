@@ -23,4 +23,8 @@ class Foo(Pipelined):
 
 obj = Foo("hello")
 print(obj.say())  #  Hello Fucking World!
+
+Foo.say.add(lambda self, text: text + " (from lambda)")
+print(obj.say())  # Hello Fucking World! (from lambda)
+
 ```
