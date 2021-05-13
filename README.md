@@ -62,6 +62,6 @@ class Foo:
 ```
 All validators could be accessed through `_validators` attribute:
 ```python
->>> print(combine(Sized, String, Salary, min_size=5, amount=100, currency="USD"))
->>> Combination of [Sized, String, Salary] validators
+>>> print(combine(Sized, String, Salary, min_size=5, amount=100, currency="USD")._validators)
+>>> (<class 'pankoff.validators.Sized'>, <class 'pankoff.validators.String'>, <class '__main__.Salary'>)
 ```
