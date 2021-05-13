@@ -14,6 +14,9 @@ def _was_not_initiated(instance, signature):
 
 class _Descriptor:
 
+    def __init__(self, **kwargs):
+        del self._call_cache
+
     def __set_name__(self, owner, name):
         self.attr_name = name
 
@@ -39,11 +42,7 @@ class BaseValidator(ABC, _Descriptor):
         if id(base.__setup__) not in self._call_cache and _was_not_initiated(self, signature):
             base.__setup__(self, **kw)
             self._call_cache.add(id(base.__setup__))
-
-        if base is BaseValidator:
-            super(base, self).__init__(**kwargs)
-        else:
-            super(base, self).__init__(__mro__=__mro__, **kwargs)
+        super(base, self).__init__(__mro__=__mro__, **kwargs)
 
     def __set__(self, instance, value, __mro__=None):
         if not __mro__:
