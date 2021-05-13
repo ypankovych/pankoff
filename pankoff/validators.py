@@ -42,6 +42,6 @@ class Number(Type):
     def validate(self, instance, value):
         super(Number, self).validate(instance, value)
         if self.min_value is not None and value < self.min_value:
-            raise ValueError(f"Attribute `{self.attr_name}` length should be >= {self.min_value}")
+            raise ValueError(f"Attribute `{self.attr_name}` should be >= {self.min_value}")
         elif self.max_value is not None and value > self.max_value:
-            raise ValueError(f"Attribute `{self.attr_name}` length should be <= {self.max_value}")
+            raise ValueError(f"Attribute `{self.attr_name}` should be <= {self.max_value}")
