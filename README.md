@@ -42,9 +42,10 @@ person = Person(
 person = Person(
     name="John",
     age=18,
-    backpack=[1, 2, 3, 4, 5],
-    salary="1000 USD"
-)  # ValueError: Wrong salary in field: `salary`
+    backpack=(1, 2, 3, 4),
+    salary="100 USD"
+)
+# pankoff.exceptions.ValidationError: ["Attribute `backpack` should be an instance of `(<class 'list'>,)`", 'Attribute `backpack` length should be >= 5']
 ```
 ## combine() function
 You can use `comdine(...)` to combine many validators.
