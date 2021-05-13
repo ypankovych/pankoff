@@ -69,5 +69,5 @@ All validators could be accessed through `_validators` attribute:
 Also, it has a nice repr:
 ```python
 >>> print(combined_validator)
->>> Combination of [Sized, String, Salary] validators
+>>> CombinedValidator(Sized, String, Salary)
 ```

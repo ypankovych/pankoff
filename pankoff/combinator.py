@@ -8,7 +8,7 @@ def combine(*validators, **kwargs):
     """
     def __repr__(self):
         validator_names = ", ".join(validator.__name__ for validator in type(self).__bases__)
-        return f"Combination of [{validator_names}] validators"
+        return f"{type(self).__name__}({validator_names})"
 
     klass = type(
         "CombinedValidator",
