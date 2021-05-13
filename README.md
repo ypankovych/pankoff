@@ -60,3 +60,8 @@ Or:
 class Foo:
     name = combine(String, Sized, min_size=15)
 ```
+All validators in could be accessed through `_validators` attribute:
+```python
+>>> print(combine(Sized, String, Salary, min_size=5, amount=100, currency="USD"))
+>>> Combination of [Sized, String, Salary] validators
+```
