@@ -1,30 +1,62 @@
-# python-class-pipelines
-
+# Here's full usage example:
 ```python
-from pipelined import Pipelined
+from pankoff.combinator import combine
+from pankoff.validators import Sized, String, Number, Type, BaseValidator
 
 
-class Foo(Pipelined):
-    def __init__(self, initial):
-        self.initial = initial
+class Salary(BaseValidator):
 
-    def say(self):
-        return self.initial + " fucking"
+    def __setup__(self, amount, currency):
+        self.amount = amount
+        self.currency = currency
 
-    def say(self, text):
-        return text + " world"
-
-    def say(self, text):
-        return text + "!"
-
-    def say(self, text):
-        return text.title()
+    def validate(self, instance, value):
+        amount, currency = value.split()
+        if int(amount) != self.amount or currency != self.currency:
+            raise ValueError(f"Wrong salary in field: `{self.attr_name}`")
 
 
-obj = Foo("hello")
-print(obj.say())  #  Hello Fucking World!
+class Person:
+    name = String()
+    age = Number(min_value=18, max_value=100)
+    backpack = combine(Type, Sized, types=(list,), min_size=5)
+    salary = Salary(amount=100, currency="USD")
 
-Foo.say.add(lambda self, text: text + " (from lambda)")
-print(obj.say())  # Hello Fucking World! (from lambda)
+    def __init__(self, name, age, backpack, salary):
+        self.name = name
+        self.age = age
+        self.backpack = backpack
+        self.salary = salary
 
+
+person = Person(
+    name="John",
+    age=18,
+    backpack=[1, 2, 3, 4, 5],
+    salary="100 USD"
+)
+```
+## Now, lets try invalid data:
+```python
+
+person = Person(
+    name="John",
+    age=18,
+    backpack=[1, 2, 3, 4, 5],
+    salary="1000 USD"
+)  # ValueError: Wrong salary in field: `salary`
+```
+## combine() function
+You can use `comdine(...)` to combine many validators.
+
+If has 2 possible invocation ways:
+```python
+name_validator = combine(String, Sized)
+class Foo:
+    name = name_validator(min_size=15)
+```
+Or:
+```python
+class Foo:
+    name = combine(String, Sized, min_size=15)
 ```
