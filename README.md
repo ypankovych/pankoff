@@ -101,6 +101,11 @@ Or:
 class Foo:
     name = combine(String, Sized, min_size=15)
 ```
+Essentially, it is the same as:
+```python
+class MyCombinedValidator(String, Sized, ...):
+    pass
+```
 All validators could be accessed through `_validators` attribute:
 ```python
 >>> combined_validator = combine(Sized, String, Salary, min_size=5, amount=100, currency="USD")
