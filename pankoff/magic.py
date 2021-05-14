@@ -10,8 +10,8 @@ def autoinit(klass=None, verbose=False):
         namespace = {}
         for attr in vars(cls).values():
             if isinstance(attr, BaseValidator):
-                attrs.append(attr.attr_name)
-                assignments.append(f"self.{attr.attr_name} = {attr.attr_name}")
+                attrs.append(attr.field_name)
+                assignments.append(f"self.{attr.field_name} = {attr.field_name}")
         init = init_template.format(
             arguments=", ".join(attrs),
             assignments="\n\t".join(assignments or ["pass"])

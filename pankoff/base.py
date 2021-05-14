@@ -23,13 +23,13 @@ class _Descriptor:
         _invalidate_call_cache(self, target="__setup__")
 
     def __set_name__(self, owner, name):
-        self.attr_name = name
+        self.field_name = name
 
     def __set__(self, instance, value, errors, **kwargs):
         _invalidate_call_cache(self, target="validate")
         if errors:
             raise ValidationError(errors)
-        vars(instance)[self.attr_name] = value
+        vars(instance)[self.field_name] = value
 
 
 class BaseValidator(ABC, _Descriptor):

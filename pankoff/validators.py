@@ -12,9 +12,9 @@ class Sized(BaseValidator):
 
     def validate(self, instance, value):
         if self.min_size is not None and len(value) < self.min_size:
-            raise ValidationError(f"Attribute `{self.attr_name}` length should be >= {self.min_size}")
+            raise ValidationError(f"Attribute `{self.field_name}` length should be >= {self.min_size}")
         elif self.max_size is not None and len(value) > self.max_size:
-            raise ValidationError(f"Attribute `{self.attr_name}` length should be <= {self.max_size}")
+            raise ValidationError(f"Attribute `{self.field_name}` length should be <= {self.max_size}")
 
 
 class Type(BaseValidator):
@@ -24,7 +24,7 @@ class Type(BaseValidator):
 
     def validate(self, instance, value):
         if not isinstance(value, self.types):
-            raise ValidationError(f"Attribute `{self.attr_name}` should be an instance of `{self.types}`")
+            raise ValidationError(f"Attribute `{self.field_name}` should be an instance of `{self.types}`")
 
 
 class String(Type):
@@ -43,6 +43,6 @@ class Number(Type):
     def validate(self, instance, value):
         super(Number, self).validate(instance, value)
         if self.min_value is not None and value < self.min_value:
-            raise ValidationError(f"Attribute `{self.attr_name}` should be >= {self.min_value}")
+            raise ValidationError(f"Attribute `{self.field_name}` should be >= {self.min_value}")
         elif self.max_value is not None and value > self.max_value:
-            raise ValidationError(f"Attribute `{self.attr_name}` should be <= {self.max_value}")
+            raise ValidationError(f"Attribute `{self.field_name}` should be <= {self.max_value}")
