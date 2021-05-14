@@ -17,7 +17,7 @@ class Salary(BaseValidator):
     def validate(self, instance, value):
         amount, currency = value.split()
         if int(amount) != self.amount or currency != self.currency:
-            raise ValidationError(f"Wrong salary in field: `{self.attr_name}`")
+            raise ValidationError(f"Wrong data in field: `{self.attr_name}`")
 
 
 class Person:
