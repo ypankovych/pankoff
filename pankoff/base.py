@@ -41,8 +41,10 @@ class BaseValidator(ABC, _Descriptor):
                 __inner.__called__ = True
                 ret = func(*args, **kw)
                 return ret
+
             __inner.__wrapped__ = func
             return __inner
+
         for func_name in ("__setup__", "validate"):
             if hasattr(cls, func_name):
                 setattr(cls, func_name, __cached_wrapper(getattr(cls, func_name)))
