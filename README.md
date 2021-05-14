@@ -1,6 +1,7 @@
 # Here's full usage example:
 ```python
 from pankoff.combinator import combine
+from pankoff.exceptions import ValidationError
 from pankoff.validators import Sized, String, Number, Type, BaseValidator
 
 
@@ -13,7 +14,7 @@ class Salary(BaseValidator):
     def validate(self, instance, value):
         amount, currency = value.split()
         if int(amount) != self.amount or currency != self.currency:
-            raise ValueError(f"Wrong salary in field: `{self.attr_name}`")
+            raise ValidationError(f"Wrong salary in field: `{self.attr_name}`")
 
 
 class Person:
