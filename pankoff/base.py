@@ -1,6 +1,8 @@
 import functools
 import inspect
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
+
+from pankoff.combinator import combine
 
 from pankoff.exceptions import ValidationError
 
@@ -15,6 +17,15 @@ def _invalidate_call_cache(instance, target):
             attribute = getattr(base, target, None)
             if hasattr(attribute, "__called__"):
                 del attribute.__called__
+
+
+class ExtendedABCMeta(ABCMeta):
+    def __and__(cls, other):
+        if getattr(cls, "__combinator__", False):
+            bases = cls.__bases__
+            bases += (other,)
+            return combine(*bases)
+        return combine(cls, other)
 
 
 class _Descriptor:
@@ -32,7 +43,7 @@ class _Descriptor:
         vars(instance)[self.field_name] = value
 
 
-class BaseValidator(ABC, _Descriptor):
+class BaseValidator(_Descriptor, metaclass=ExtendedABCMeta):
 
     def __init_subclass__(cls, **kwargs):
         def __cached_wrapper(func):

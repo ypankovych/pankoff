@@ -30,18 +30,18 @@ class Type(BaseValidator):
 class String(Type):
 
     def __setup__(self, types=(str,)):
-        super(String, self).__setup__(types)
+        Type.__setup__(self, types)
 
 
 class Number(Type):
 
     def __setup__(self, min_value=None, max_value=None, types=(numbers.Number,)):
-        super(Number, self).__setup__(types)
+        Type.__setup__(self, types)
         self.min_value = min_value
         self.max_value = max_value
 
     def validate(self, instance, value):
-        super(Number, self).validate(instance, value)
+        Type.validate(self, instance, value)
         if self.min_value is not None and value < self.min_value:
             raise ValidationError(f"Attribute `{self.field_name}` should be >= {self.min_value}")
         elif self.max_value is not None and value > self.max_value:
