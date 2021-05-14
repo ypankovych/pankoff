@@ -1,3 +1,6 @@
+# Instalation:
+`pip install pankoff`
+
 # Here's full usage example:
 ```python
 from pankoff.combinator import combine
