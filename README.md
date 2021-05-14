@@ -48,6 +48,13 @@ person = Person(
 )
 # pankoff.exceptions.ValidationError: ["Attribute `backpack` should be an instance of `(<class 'list'>,)`", 'Attribute `backpack` length should be >= 5']
 ```
+## Accessing the errors:
+```python
+try:
+    Person(...)
+except ValidationError as exc:
+    print(exc.errors)
+```
 ## combine() function
 You can use `comdine(...)` to combine many validators.
 
