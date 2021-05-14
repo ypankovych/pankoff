@@ -1,4 +1,4 @@
-# Pankoff
+# Pankoff (do not use in prod)
 
 Light weight, flexible, easy to use validation tool.
 
