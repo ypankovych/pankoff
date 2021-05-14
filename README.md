@@ -1,6 +1,5 @@
 # Pankoff
 
----
 Light weight, flexible, easy to use validation tool.
 
 ## Instalation:
