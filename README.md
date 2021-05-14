@@ -131,4 +131,7 @@ Also, it has a nice repr:
 ```python
 >>> print(combined_validator)
 >>> CombinedValidator(Sized, String, Salary)
+
+>>> print(Sized & String & Number & Type)
+>>> Combination of (Sized, String, Number, Type) validators
 ```
