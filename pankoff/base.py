@@ -20,12 +20,18 @@ def _invalidate_call_cache(instance, target):
 
 
 class ExtendedABCMeta(ABCMeta):
-    def __and__(cls, other):
-        if getattr(cls, "__combinator__", False):
-            bases = cls.__bases__
+    def __and__(self, other):
+        if getattr(self, "__combinator__", False):
+            bases = self.__bases__
             bases += (other,)
             return combine(*bases)
-        return combine(cls, other)
+        return combine(self, other)
+
+    def __repr__(self):
+        if getattr(self, "__combinator__", False):
+            validator_names = ", ".join(v.__name__ for v in self._validators)
+            return f"Combination of ({validator_names}) validators"
+        return super(ExtendedABCMeta, self).__repr__()
 
 
 class _Descriptor:
