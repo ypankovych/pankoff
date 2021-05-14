@@ -87,7 +87,7 @@ try:
 except ValidationError as exc:
     print(exc.errors)
 ```
-## `combine()` function
+## Combining validators 
 You can use `combine(...)` to combine many validators.
 
 It has 2 possible invocation ways:
