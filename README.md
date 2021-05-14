@@ -2,7 +2,14 @@
 
 Light weight, flexible, easy to use validation tool.
 
-## Instalation:
+- [Installation](#installation)
+- [Full usage example](#heres-full-usage-example)
+    - [Creating an instance](#now-lets-create-an-instance)
+    - [Validation errors](#lets-try-invalid-data)
+- [Accessing the errors](#accessing-the-errors)
+- [Combining validators](#combining-validators)
+
+## Installation:
 `pip install --user pankoff`
 
 ## Here's full usage example:
