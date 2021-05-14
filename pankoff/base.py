@@ -12,7 +12,7 @@ def _invalidate_call_cache(instance, target):
     instance_type = type(instance)
     for base in instance_type.mro():
         if hasattr(base, target):
-            attribute = getattr(base, target)
+            attribute = getattr(base, target, None)
             if hasattr(attribute, "__called__"):
                 del attribute.__called__
 
@@ -38,8 +38,8 @@ class BaseValidator(ABC, _Descriptor):
         def __cached_wrapper(func):
             @functools.wraps(func)
             def __inner(*args, **kw):
+                __inner.__called__ = True
                 ret = func(*args, **kw)
-                func.__called__ = True
                 return ret
             __inner.__wrapped__ = func
             return __inner
@@ -58,7 +58,7 @@ class BaseValidator(ABC, _Descriptor):
             if parameter.name in kwargs:
                 kw[parameter.name] = kwargs.pop(parameter.name)
         if base.__setup__ is not BaseValidator.__setup__:
-            if not getattr(base.__setup__.__wrapped__, "__called__", False):
+            if not getattr(base.__setup__, "__called__", False):
                 base.__setup__(self, **kw)
         super(base, self).__init__(__mro__=__mro__, **kwargs)
 
@@ -68,7 +68,7 @@ class BaseValidator(ABC, _Descriptor):
             __mro__ = type(self).mro()
         base, __mro__ = __mro__[0], __mro__[1:]
         if base.validate is not BaseValidator.validate:
-            if not getattr(base.validate.__wrapped__, "__called__", False):
+            if not getattr(base.validate, "__called__", False):
                 try:
                     base.validate(self, instance, value)
                 except ValidationError as exc:
