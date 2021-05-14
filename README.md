@@ -1,5 +1,5 @@
 # Instalation:
-`pip install pankoff`
+`pip install --user pankoff`
 
 # Here's full usage example:
 ```python
