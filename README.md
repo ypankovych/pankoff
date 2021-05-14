@@ -108,6 +108,10 @@ Or:
 class Foo:
     name = combine(String, Sized, min_size=15)
 ```
+Besides the `combine()`, you can chain validators, e.g:
+```python
+name_validator = String & Sized & ...
+```
 Essentially, it is the same as:
 ```python
 class MyCombinedValidator(String, Sized, ...):
