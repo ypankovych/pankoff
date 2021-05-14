@@ -1,7 +1,12 @@
-# Instalation:
+# Pankoff
+
+---
+Light weight, flexible, easy to use validation tool.
+
+## Instalation:
 `pip install --user pankoff`
 
-# Here's full usage example:
+## Here's full usage example:
 ```python
 from pankoff.combinator import combine
 from pankoff.exceptions import ValidationError
@@ -56,7 +61,7 @@ def __init__(self, name, age, backpack, salary):
 	self.salary = salary
 """
 ```
-## Now, let's create an instance:
+### Now, let's create an instance:
 ```python
 person = Person(
     name="John",
