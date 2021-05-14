@@ -1,6 +1,6 @@
 from distutils.core import setup
 
-version = "2.0"
+version = "3.0"
 setup(
     name='pankoff',  # How you named your package folder (MyLib)
     packages=['pankoff'],  # Chose the same as "name"

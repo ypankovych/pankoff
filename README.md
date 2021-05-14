@@ -31,8 +31,33 @@ class Person:
         self.age = age
         self.backpack = backpack
         self.salary = salary
+```
+Also, it is  possible to autogenerate `__init__`:
+```python
+from pankoff.magic import autoinit
 
+@autoinit
+class Person:
+    name = String()
+    age = Number(min_value=18, max_value=100)
+    backpack = combine(Type, Sized, types=(list,), min_size=5)
+    salary = Salary(amount=100, currency="USD")
 
+# pass `verbose=True` to `autocommit` in order to see generated source:
+@autoinit(verbose=True)
+class Person:
+    ...
+# prints:
+"""
+def __init__(self, name, age, backpack, salary):
+	self.name = name
+	self.age = age
+	self.backpack = backpack
+	self.salary = salary
+"""
+```
+## Now, let's create an instance:
+```python
 person = Person(
     name="John",
     age=18,
@@ -40,7 +65,7 @@ person = Person(
     salary="100 USD"
 )
 ```
-## Now, lets try invalid data:
+### Lets try invalid data:
 ```python
 
 person = Person(
