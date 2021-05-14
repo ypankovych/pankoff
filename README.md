@@ -59,9 +59,9 @@ except ValidationError as exc:
     print(exc.errors)
 ```
 ## combine() function
-You can use `comdine(...)` to combine many validators.
+You can use `combine(...)` to combine many validators.
 
-If has 2 possible invocation ways:
+It has 2 possible invocation ways:
 ```python
 name_validator = combine(String, Sized)
 class Foo:
