@@ -89,7 +89,7 @@ person = Person(
     backpack=(1, 2, 3, 4),
     salary="100 USD"
 )
-# pankoff.exceptions.ValidationError: ["Attribute `backpack` should be an instance of `(<class 'list'>,)`", 'Attribute `backpack` length should be >= 5']
+# pankoff.exceptions.ValidationError: ['Attribute `backpack` should be an instance of `list`', 'Attribute `backpack` length should be >= 5']
 ```
 ## Accessing the errors:
 ```python
