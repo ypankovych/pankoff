@@ -24,7 +24,10 @@ class Type(BaseValidator):
 
     def validate(self, instance, value):
         if not isinstance(value, self.types):
-            raise ValidationError(f"Attribute `{self.field_name}` should be an instance of `{self.types}`")
+            types_names = ",".join(_type.__name__ for _type in self.types)
+            raise ValidationError(
+                f"Attribute `{self.field_name}` should be an instance of `{types_names}`"
+            )
 
 
 class String(Type):
