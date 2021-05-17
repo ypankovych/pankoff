@@ -1,10 +1,6 @@
-# Pankoff (do not use in prod)
+# Pankoff
 
 Light weight, flexible, easy to use validation tool.
-
-> Q: Why shouldn't i use it in prod?
-
-> A: It manipulates with MRO a lot, so it could be unstable under certain circumstances
 
 - [Installation](#installation)
 - [Full usage example](#heres-full-usage-example)
