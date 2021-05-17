@@ -77,6 +77,7 @@ class Person(Container):
     ...
 # prints:
 """
+Generated __init__ method for <class '__main__.Person'>
 def __init__(self, name, age, backpack, payment):
 	self.name = name
 	self.age = age
