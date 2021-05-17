@@ -83,7 +83,9 @@ def __init__(self, name, age, backpack, payment):
 	self.payment = payment
 """
 ```
-### Now, let's create an instance:
+### Now, let's create an instance. There's few possible ways to do it:
+
+Using class constructor directly:
 ```python
 person = Person(
     name="John",
@@ -92,9 +94,32 @@ person = Person(
     payment=100
 )
 ```
+Create an instance from `dict`:
+```python
+data = {
+  "name": "John",
+  "age": 18,
+  "backpack": [1, 2, 3, 4, 5],
+  "payment": 100
+}
+person = Person.from_dict(data)
+# or simply:
+person = Person(**data)
+```
+And the last one, create an instance from json:
+```python
+data = """
+{
+  "name": "John",
+  "age": 18,
+  "backpack": [1, 2, 3, 4, 5],
+  "payment": 100
+}
+"""
+person = Person.from_json(data, loader=json.loads)  # json.loads is default loader
+```
 ### Lets try invalid data:
 ```python
-
 person = Person(
     name="John",
     age=18,
@@ -102,6 +127,24 @@ person = Person(
     payment=100
 )
 # pankoff.exceptions.ValidationError: ['Attribute `backpack` should be an instance of `list`', 'Attribute `backpack` length should be >= 5']
+```
+There's a few ways to validate an instance. Use either `Person.validate(data)` which raises in case the data is invalid,
+or you can use `Person.is_valid(data)` which returns `True/False`.
+```python
+Person.validate({
+  "name": "John",
+  "age": 18,
+  "backpack": [1, 2, 3, 4, 5],
+  "payment": 10
+})  # pankoff.exceptions.ValidationError: ['Wrong data in field: `payment`']
+```
+```python
+print(Person.is_valid({
+  "name": "John",
+  "age": 18,
+  "backpack": [1, 2, 3, 4, 5],
+  "payment": 10
+})))  # False
 ```
 ## Predicates
 As you can see, it is possible to define predicates for your fields, e.g:

@@ -1,5 +1,6 @@
 import functools
 import inspect
+import json
 from abc import ABCMeta, abstractmethod
 
 from pankoff.combinator import combine
@@ -7,6 +8,27 @@ from pankoff.exceptions import ValidationError
 
 
 # CAUTION!!! do not touch anything here
+
+
+class Container:
+    @classmethod
+    def from_dict(cls, data):
+        return cls(**data)
+
+    @classmethod
+    def from_json(cls, data, loader=None):
+        loader = loader or json.loads
+        return cls.from_dict(loader(data))
+
+    @classmethod
+    def is_valid(cls, data):
+        try:
+            cls.validate(data)
+            return True
+        except ValidationError:
+            return False
+
+    validate = from_dict
 
 
 def _invalidate_call_cache(instance, target):
