@@ -16,6 +16,7 @@ Light weight, flexible, easy to use validation tool.
 
 ## Here's full usage example:
 ```python
+from pankoff.base import Container
 from pankoff.combinator import combine
 from pankoff.exceptions import ValidationError
 from pankoff.validators import Sized, String, Number, Type, BaseValidator, Predicate
@@ -33,7 +34,7 @@ class Salary(BaseValidator):
             raise ValidationError(f"Wrong data in field: `{self.field_name}`")
 
 
-class Person:
+class Person(Container):
     name = String()
     age = Number(min_value=18, max_value=100)
     backpack = combine(Type, Sized, types=(list,), min_size=5)
@@ -57,7 +58,7 @@ Also, it is  possible to autogenerate `__init__`:
 from pankoff.magic import autoinit
 
 @autoinit
-class Person:
+class Person(Container):
     name = String()
     age = Number(min_value=18, max_value=100)
     backpack = combine(Type, Sized, types=(list,), min_size=5)
@@ -72,7 +73,7 @@ class Person:
 
 # pass `verbose=True` to `autocommit` in order to see generated source:
 @autoinit(verbose=True)
-class Person:
+class Person(Container):
     ...
 # prints:
 """
@@ -146,6 +147,8 @@ print(Person.is_valid({
   "payment": 10
 })))  # False
 ```
+NOTE: you're not forced to inherit from `Container`, it simply gives you a few additional methods: `is_valid`, 
+`from_json`, `from_dict`, `validate`.
 ## Predicates
 As you can see, it is possible to define predicates for your fields, e.g:
 ```python
