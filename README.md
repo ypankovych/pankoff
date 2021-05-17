@@ -1,6 +1,6 @@
 # Pankoff
 
-Light weight, flexible, easy to use validation tool.
+Light weight, flexible, easy to use validation tool. Pure Python, no dependencies.
 
 - [Installation](#installation)
 - [Full usage example](#heres-full-usage-example)
