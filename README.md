@@ -12,6 +12,7 @@ Light weight, flexible, easy to use validation tool.
     - [Validation errors](#lets-try-invalid-data)
 - [Accessing the errors](#accessing-the-errors)
 - [Combining validators](#combining-validators)
+- [Important limitations](#important-limitations)
 
 ## Installation:
 `pip install --user pankoff`
@@ -135,3 +136,7 @@ Also, it has a nice repr:
 >>> print(Sized & String & Number & Type)
 >>> Combination of (Sized, String, Number, Type) validators
 ```
+## Important limitations
+As you may already know, Pankoff uses MRO a lot, because of that, you're not allowed to use
+`super().validate()` and `super().__setup__()`, instead, you should still subclass validators, but
+call directly to `__setup__` and `validate`, e.g: `Type.validate(...)`.
