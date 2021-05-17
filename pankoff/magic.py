@@ -5,6 +5,9 @@ init_template = "def __init__({arguments}):\n\t{assignments}"
 
 def autoinit(klass=None, verbose=False):
     def inner(cls):
+        if cls.__init__ is not object.__init__:
+            raise RuntimeError(f"{cls} already has __init__ method defined")
+
         attrs = ["self"]
         assignments = []
         namespace = {}
@@ -17,7 +20,7 @@ def autoinit(klass=None, verbose=False):
             assignments="\n\t".join(assignments or ["pass"])
         )
         if verbose:
-            print(init)
+            print(f"Generated __init__ method for {cls}\n{init}")
         exec(init, namespace)
         cls.__init__ = namespace["__init__"]
         return cls

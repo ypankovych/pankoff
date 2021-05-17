@@ -3,6 +3,8 @@ import numbers
 from pankoff.base import BaseValidator
 from pankoff.exceptions import ValidationError
 
+UNSET = object()
+
 
 class Sized(BaseValidator):
 
@@ -49,3 +51,25 @@ class Number(Type):
             raise ValidationError(f"Attribute `{self.field_name}` should be >= {self.min_value}")
         elif self.max_value is not None and value > self.max_value:
             raise ValidationError(f"Attribute `{self.field_name}` should be <= {self.max_value}")
+
+
+class Predicate(BaseValidator):
+
+    def __setup__(self, predicate, default=UNSET, error_message=None):
+        self.predicate = predicate
+        self.default = default
+        self.error_message = error_message
+
+    def validate(self, instance, value):
+        is_valid = self.predicate(instance, value)
+        if not is_valid:
+            if self.default is not UNSET:
+                return self.default(instance, value) if callable(self.default) else self.default
+            error_message = self.error_message or "Predicate {predicate} failed for field: {field_name}"
+            raise ValidationError(
+                error_message.format(
+                    predicate=self.predicate.__name__,
+                    field_name=self.field_name,
+                    value=value
+                )
+            )

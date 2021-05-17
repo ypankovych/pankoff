@@ -88,7 +88,9 @@ class BaseValidator(_Descriptor, metaclass=ExtendedABCMeta):
         if base.validate is not BaseValidator.validate:
             if not getattr(base.validate, "__called__", False):
                 try:
-                    base.validate(self, instance, value)
+                    ret = base.validate(self, instance, value)
+                    if ret is not None:
+                        value = ret
                 except ValidationError as exc:
                     errors.append(str(exc))
         super(base, self).__set__(instance, value, __mro__=__mro__, errors=errors)

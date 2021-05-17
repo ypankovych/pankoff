@@ -6,6 +6,7 @@ Light weight, flexible, easy to use validation tool.
 - [Full usage example](#heres-full-usage-example)
     - [Creating an instance](#now-lets-create-an-instance)
     - [Validation errors](#lets-try-invalid-data)
+- [Predicates](#predicates)
 - [Accessing the errors](#accessing-the-errors)
 - [Combining validators](#combining-validators)
 - [Important limitations](#important-limitations)
@@ -17,7 +18,7 @@ Light weight, flexible, easy to use validation tool.
 ```python
 from pankoff.combinator import combine
 from pankoff.exceptions import ValidationError
-from pankoff.validators import Sized, String, Number, Type, BaseValidator
+from pankoff.validators import Sized, String, Number, Type, BaseValidator, Predicate
 
 
 class Salary(BaseValidator):
@@ -36,7 +37,14 @@ class Person:
     name = String()
     age = Number(min_value=18, max_value=100)
     backpack = combine(Type, Sized, types=(list,), min_size=5)
-    salary = Salary(amount=100, currency="USD")
+    payment = combine(
+        Predicate, Salary,
+        # Predicate
+        predicate=lambda instance, value: value == "100 USD",
+        default=lambda instance, value: str(value) + " USD",
+        # Salary
+        amount=100, currency="USD"
+    )
 
     def __init__(self, name, age, backpack, salary):
         self.name = name
@@ -53,7 +61,14 @@ class Person:
     name = String()
     age = Number(min_value=18, max_value=100)
     backpack = combine(Type, Sized, types=(list,), min_size=5)
-    salary = Salary(amount=100, currency="USD")
+    payment = combine(
+        Predicate, Salary,
+        # Predicate
+        predicate=lambda instance, value: value == "100 USD",
+        default=lambda instance, value: str(value) + " USD",
+        # Salary
+        amount=100, currency="USD"
+    )
 
 # pass `verbose=True` to `autocommit` in order to see generated source:
 @autoinit(verbose=True)
@@ -61,11 +76,11 @@ class Person:
     ...
 # prints:
 """
-def __init__(self, name, age, backpack, salary):
+def __init__(self, name, age, backpack, payment):
 	self.name = name
 	self.age = age
 	self.backpack = backpack
-	self.salary = salary
+	self.payment = payment
 """
 ```
 ### Now, let's create an instance:
@@ -74,7 +89,7 @@ person = Person(
     name="John",
     age=18,
     backpack=[1, 2, 3, 4, 5],
-    salary="100 USD"
+    payment=100
 )
 ```
 ### Lets try invalid data:
@@ -84,9 +99,40 @@ person = Person(
     name="John",
     age=18,
     backpack=(1, 2, 3, 4),
-    salary="100 USD"
+    payment=100
 )
 # pankoff.exceptions.ValidationError: ['Attribute `backpack` should be an instance of `list`', 'Attribute `backpack` length should be >= 5']
+```
+## Predicates
+As you can see, it is possible to define predicates for your fields, e.g:
+```python
+@autoinit
+class Car:
+    windows = combine(
+        Predicate, Number,
+        # Predicate
+        predicate=lambda instance, value: value == 4,
+        default=lambda instance, value: int(value) * 2,
+        min_value=4
+    )
+```
+Now we can actually tweak `windows` count if it doesn't satisfy our predicate, e.g:
+```python
+car = Car(windows="2")
+```
+This car considered valid. We just normalized our data using `defaukt` argument of predicate (turned `"2"` into `4`). 
+
+Also, it is possible to specify custom error templates for predicates:
+```python
+@autoinit
+class Car:
+    windows = Predicate(
+        predicate=lambda instance, value: value == 4,
+        error_message="Invalid value for field `{field_name}`, got value {value}. Predicate {predicate} failed."
+    )
+
+car = Car(windows="2")
+# pankoff.exceptions.ValidationError: ['Invalid value for field `windows`, got value 2. Predicate <lambda> failed.']
 ```
 ## Accessing the errors:
 ```python
