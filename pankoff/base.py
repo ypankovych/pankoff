@@ -3,7 +3,7 @@ import inspect
 from abc import ABCMeta, abstractmethod
 
 from pankoff.combinator import combine
-from pankoff.exceptions import ValidationError, InconsistentOrderError
+from pankoff.exceptions import ValidationError
 
 
 # CAUTION!!! do not touch anything here
@@ -20,16 +20,11 @@ def _invalidate_call_cache(instance, target):
 
 class ExtendedABCMeta(ABCMeta):
     def __and__(self, other):
-        try:
-            if getattr(self, "__combinator__", False):
-                bases = self.__bases__
-                bases += (other,)
-                return combine(*bases)
-            return combine(self, other)
-        except TypeError as exc:
-            raise InconsistentOrderError(
-                "Some validators either combined in a wrong order or cannot be combined together at all"
-            ) from exc
+        if getattr(self, "__combinator__", False):
+            bases = self.__bases__
+            bases += (other,)
+            return combine(*bases)
+        return combine(self, other)
 
     def __repr__(self):
         if getattr(self, "__combinator__", False):
