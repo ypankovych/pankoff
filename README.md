@@ -113,6 +113,7 @@ class Car:
         # Predicate
         predicate=lambda instance, value: value == 4,
         default=lambda instance, value: int(value) * 2,
+        # Number
         min_value=4
     )
 ```
