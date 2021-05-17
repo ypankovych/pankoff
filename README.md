@@ -120,7 +120,7 @@ Now we can actually tweak `windows` count if it doesn't satisfy our predicate, e
 ```python
 car = Car(windows="2")
 ```
-This car considered valid. We just normalized our data using `defaukt` argument of predicate (turned `"2"` into `4`). 
+This car considered valid. We just normalized our data using `default` argument of predicate (turned `"2"` into `4`). 
 
 Also, it is possible to specify custom error templates for predicates:
 ```python
