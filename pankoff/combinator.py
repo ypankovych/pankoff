@@ -3,11 +3,12 @@ from pankoff.exceptions import InconsistentOrderError
 
 def combine(*validators, **kwargs):
     """
-    Returns a combination of validators. E.g
-    >>> name_validator = combine(Type, Sized)
-    >>> name_validator(types=(str,), min_size=10)
-    Of alternativelly:
-    >>> name_validator = combine(Type, Sized, types=(str,), min_size=10)
+    Returns either "raw" combined validator or an instance of it.
+
+    :param validators: Validators to combine
+    :param kwargs: If specified, ``kwargs`` will be unpacked to newly created combined validator
+
+    :returns: Either "raw" combined validator or its instance
     """
     from pankoff.base import ExtendedABCMeta
 

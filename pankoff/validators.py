@@ -7,6 +7,15 @@ UNSET = object()
 
 
 class Sized(BaseValidator):
+    """
+    Validate whether field length is within specified range.
+
+    :param min_size: minimum length for a field
+    :type min_size: int, optional
+
+    :param max_size: maximum length for a field
+    :type max_size: int, optional
+    """
 
     def __setup__(self, min_size=None, max_size=None):
         self.min_size = min_size
@@ -20,6 +29,9 @@ class Sized(BaseValidator):
 
 
 class Type(BaseValidator):
+    """
+    Validate whether field is instance of at least one type in ``types``.
+    """
 
     def __setup__(self, types):
         self.types = types
@@ -33,12 +45,24 @@ class Type(BaseValidator):
 
 
 class String(Type):
+    """
+    Validate whether field is instance of type ``str``.
+    """
 
     def __setup__(self, types=(str,)):
         Type.__setup__(self, types)
 
 
 class Number(Type):
+    """
+    Validate whether field is an instance of type ``int`` and within specified range.
+
+    :param min_value: minimum value for a field
+    :type min_value: int, optional
+
+    :param max_value: maximum value for a field
+    :type max_value: int, optional
+    """
 
     def __setup__(self, min_value=None, max_value=None, types=(numbers.Number,)):
         Type.__setup__(self, types)
@@ -54,6 +78,24 @@ class Number(Type):
 
 
 class Predicate(BaseValidator):
+    """
+    Predicate is a bit more complex validator.
+    Basically, it checks your field against specified condition in ``predicate``.
+
+    ``predicate`` is a simple callable which should return either ``True`` or ``False``.
+    It'll be called with current ``instance`` and ``value`` to validate: ``predicate(instance, value)``.
+
+    If ``predicate`` returned ``False``, and ``default`` is set, ``instance`` and ``value`` will be propagated to
+    ``default`` if ``default`` is callable, if it's not, ``default`` will be returned straight away.
+
+    THe key feature of ``default`` is that it can "normalize" your value if it's invalid. See example below.
+
+    :param predicate: function to call in order to validate value
+    :type predicate: callable
+
+    :param default: default value to use if ``predicate`` returned ``False``
+    :type default: callable, any, optional
+    """
 
     def __setup__(self, predicate, default=UNSET, error_message=None):
         self.predicate = predicate
