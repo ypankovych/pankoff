@@ -4,4 +4,4 @@ Light weight, flexible, easy to use validation tool. Pure Python, no dependencie
 
 `pip install --user pankoff`
 
-Read full [documentation here.](https://pankoff.readthedocs.io/en/latest/index.html)
+Read full [documentation here.](https://pankoff.readthedocs.io/)
