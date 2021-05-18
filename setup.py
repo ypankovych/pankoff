@@ -1,6 +1,6 @@
 from distutils.core import setup
 
-version = "9.0"
+version = "10.0"
 setup(
     name='pankoff',
     packages=['pankoff'],
