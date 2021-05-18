@@ -28,3 +28,14 @@ def autoinit(klass=None, verbose=False):
     if klass is not None:
         return inner(klass)
     return inner
+
+
+class Alias:
+
+    def __init__(self, source):
+        self.source = source
+
+    def __get__(self, instance, owner):
+        if not instance:
+            return self
+        return getattr(instance, self.source)

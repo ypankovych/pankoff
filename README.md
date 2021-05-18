@@ -7,6 +7,7 @@ Light weight, flexible, easy to use validation tool. Pure Python, no dependencie
     - [Creating an instance](#now-lets-create-an-instance)
     - [Validation errors](#lets-try-invalid-data)
 - [Predicates](#predicates)
+- [Aliases](#aliases)
 - [Accessing the errors](#accessing-the-errors)
 - [Combining validators](#combining-validators)
 - [Important limitations](#important-limitations)
@@ -16,6 +17,7 @@ Light weight, flexible, easy to use validation tool. Pure Python, no dependencie
 
 ## Here's full usage example:
 ```python
+from pankoff.magic import Alias
 from pankoff.base import Container
 from pankoff.combinator import combine
 from pankoff.exceptions import ValidationError
@@ -46,6 +48,7 @@ class Person(Container):
         # Salary
         amount=100, currency="USD"
     )
+    salary = Alias("payment")
 
     def __init__(self, name, age, backpack, salary):
         self.name = name
@@ -181,6 +184,19 @@ class Car:
 
 car = Car(windows="2")
 # pankoff.exceptions.ValidationError: ['Invalid value for field `windows`, got value 2. Predicate <lambda> failed.']
+```
+## Aliases
+It is possible to create aliases for the fields. E.g
+```python
+from pankoff.magic import Alias
+
+@autoinit
+class Foo:
+    full_person_name = String()
+    name = Alias("full_person_name")
+
+obj = Foo(full_person_name="Elon Musk")
+print(obj.name)  # Elon Musk
 ```
 ## Accessing the errors:
 ```python
