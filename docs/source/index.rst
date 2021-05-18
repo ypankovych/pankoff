@@ -2,7 +2,7 @@ Pankoff
 ======================
 ``pip install --user pankoff``
 
-Pankoff is easy to use, light weight, pure python library to validate class fields.
+Pankoff is easy to use, lightweight, pure python library to validate class fields.
 
 .. toctree::
    :maxdepth: 3
