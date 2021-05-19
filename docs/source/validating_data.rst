@@ -8,6 +8,9 @@ But there's a few more options to it.
 
 You can inherit some capabilities by subclassing ``pankoff.base.Container``.
 
+.. autoclass:: pankoff.base.Container
+    :members:
+
 Lets validate JSON directly:
 
 >>> from pankoff.base import Container
