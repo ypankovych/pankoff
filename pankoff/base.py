@@ -13,6 +13,9 @@ from pankoff.exceptions import ValidationError
 class Container:
 
     def __repr__(self):
+        """
+        Make human readable representation of current instance.
+        """
         field_names = ", ".join(
             f"{field.field_name}={getattr(self, field.field_name)}"
             for field in vars(type(self)).values()

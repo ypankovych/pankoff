@@ -1,3 +1,6 @@
+"""
+See documentation at https://pankoff.rtfd.io/
+"""
 from distutils.core import setup
 
 version = "11.0"
