@@ -115,3 +115,19 @@ class Predicate(BaseValidator):
                     value=value
                 )
             )
+
+
+class LazyLoad(BaseValidator):
+    """
+    Calculate an attribute based on other fields.
+
+    :param factory: callable to calculate value for current field, accepts current instance
+    """
+
+    def __setup__(self, factory):
+        self.factory = factory
+
+    def validate(self, instance, value):
+        if value is not UNSET:
+            raise RuntimeError(f"`{self.field_name}` is a `LazyLoad` field, you're not allowed to set it directly")
+        return self.factory(instance)

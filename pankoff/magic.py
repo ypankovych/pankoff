@@ -1,4 +1,5 @@
 from pankoff.base import BaseValidator
+from pankoff.validators import UNSET, LazyLoad
 
 init_template = "def __init__({arguments}):\n\t{assignments}"
 
@@ -39,11 +40,15 @@ def autoinit(klass=None, verbose=False):
 
         attrs = ["self"]
         assignments = []
-        namespace = {}
+        namespace = {"UNSET": UNSET}
         for attr in vars(cls).values():
             if isinstance(attr, BaseValidator):
-                attrs.append(attr.field_name)
+                if isinstance(attr, LazyLoad):
+                    attrs.append(f"{attr.field_name}=UNSET")
+                else:
+                    attrs.append(attr.field_name)
                 assignments.append(f"self.{attr.field_name} = {attr.field_name}")
+        attrs.sort(key=lambda item: "=" in item)  # move default parameters to the end
         init = init_template.format(
             arguments=", ".join(attrs),
             assignments="\n\t".join(assignments or ["pass"])

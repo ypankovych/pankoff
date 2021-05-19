@@ -21,7 +21,7 @@ Now lets load it:
     from pankoff.combinator import combine
     from pankoff.exceptions import ValidationError
     from pankoff.magic import autoinit, Alias
-    from pankoff.validators import String, Number, BaseValidator, Predicate
+    from pankoff.validators import String, Number, BaseValidator, Predicate, LazyLoad
 
 
     class Salary(BaseValidator):
@@ -58,10 +58,10 @@ Now lets load it:
             error_message="Invalid value for {field_name}, person got into wrong position: {value}"
         )
         payment = Alias("salary")
-
+        job_desc = LazyLoad(factory=lambda instance: f"{instance.position} at {instance.office}")
 
     person = Person.from_path("data.json")
-    print(person)  # Person(name=Yaroslav, age=22, salary=100 USD, office=Central Office, position=Manager)
+    print(person)  # Person(name=Yaroslav, age=22, salary=100 USD, office=Central Office, position=Manager, job_desc=Manager at Central Office)
 
 Trying invalid data. Change your ``data.json``:
 

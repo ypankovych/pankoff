@@ -156,7 +156,11 @@ class BaseValidator(_Descriptor, metaclass=ExtendedABCMeta):
                 kw[parameter.name] = kwargs.pop(parameter.name)
         if base.__setup__ is not BaseValidator.__setup__:
             if not getattr(base.__setup__, "__called__", False):
-                base.__setup__(self, **kw)
+                try:
+                    base.__setup__(self, **kw)
+                except Exception:
+                    _invalidate_call_cache(self, target="__setup__")
+                    raise
         super(base, self).__init__(__mro__=__mro__, **kwargs)
 
     def __set__(self, instance, value, __mro__=None, errors=None):
@@ -172,6 +176,9 @@ class BaseValidator(_Descriptor, metaclass=ExtendedABCMeta):
                         value = ret
                 except ValidationError as exc:
                     errors.append(str(exc))
+                except Exception:
+                    _invalidate_call_cache(self, target="validate")
+                    raise
         super(base, self).__set__(instance, value, __mro__=__mro__, errors=errors)
 
     def __setup__(self, *args, **kwargs):

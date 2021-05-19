@@ -5,7 +5,7 @@ Pankoff defines a small preset of validator, and it allow you to define your own
 Default validators
 ==================
 By default, Pankoff defines a few validators, ``String``, ``Number``, ``Type``, ``Sized``,
-``Predicate``. We'll go over each one below.
+``Predicate``, ``LazyLoad``. We'll go over each one below.
 
 .. autoclass:: pankoff.validators.String()
 
@@ -39,6 +39,18 @@ By default, Pankoff defines a few validators, ``String``, ``Number``, ``Type``, 
     ...     size = Sized(min_size=20, max_size=50)
 
     >>> box = Box(size=40)
+
+.. autoclass:: pankoff.validators.LazyLoad(factory)
+
+    >>> @autoinit
+    >>> class Person(Container):
+    ...     name = String()
+    ...     surname = String()
+    ...     full_name = LazyLoad(factory=lambda instance: f"{instance.name} {instance.surname}")
+
+    >>> person = Person(name="Yaroslav", surname="Pankovych")
+    >>> print(person)
+    Person(name=Yaroslav, surname=Pankovych, full_name=Yaroslav Pankovych)
 
 .. autoclass:: pankoff.validators.Predicate(predicate, default=None, error_message=None)
 
