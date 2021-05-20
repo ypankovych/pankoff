@@ -9,13 +9,14 @@ Lets create ``data.json`` as following:
       "age": 22,
       "salary": 100,
       "office": "Central Office",
-      "position": "Manager"
+      "position": "Manager",
+      "greeting_template": "Hello, {}"
     }
 
 Now lets load it:
 
 .. code-block:: python
-    :emphasize-lines: 47
+    :emphasize-lines: 50
 
     from pankoff.base import Container
     from pankoff.combinator import combine
@@ -39,7 +40,7 @@ Now lets load it:
                 raise ValidationError(f"Wrong data in field: `{self.field_name}`")
 
 
-    @autoinit
+    @autoinit(merge=True)
     class Person(Container):
         name = String()
         age = Number(min_value=18)
@@ -63,8 +64,12 @@ Now lets load it:
         payment = Alias("salary")
         job_desc = LazyLoad(factory=lambda instance: f"{instance.position} at {instance.office}")
 
+        def  __init__(self, greeting_template):
+            self.greeting = greeting_template.format(self.name)
+
     person = Person.from_path("data.json")
     print(person)  # Person(name=Yaroslav, age=22, salary=Yaroslav salary is: 100 USD, office=Central Office, position=Manager, job_desc=Manager at Central Office)
+    print(person.greeting)  # Hello, Yaroslav
 
 Trying invalid data. Change your ``data.json``:
 
@@ -76,7 +81,8 @@ Trying invalid data. Change your ``data.json``:
       "age": 22,
       "salary": 100,
       "office": "Central Office",
-      "position": "HR"
+      "position": "HR",
+      "greeting_template": "Hello, {}"
     }
 
 Now load it:
