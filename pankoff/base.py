@@ -181,9 +181,19 @@ class BaseValidator(_Descriptor, metaclass=ExtendedABCMeta):
                     raise
         super(base, self).__set__(instance, value, __mro__=__mro__, errors=errors)
 
+    def __get__(self, instance, owner):
+        value = vars(instance)[self.field_name]
+        mutated = self.mutate(instance, value)
+        if mutated is NotImplemented:
+            mutated = value
+        return mutated
+
     def __setup__(self, *args, **kwargs):
         return NotImplemented
 
     @abstractmethod
     def validate(self, instance, value):
+        return NotImplemented
+
+    def mutate(self, instance, value):
         return NotImplemented

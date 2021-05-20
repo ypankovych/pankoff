@@ -15,7 +15,7 @@ Lets create ``data.json`` as following:
 Now lets load it:
 
 .. code-block:: python
-    :emphasize-lines: 44
+    :emphasize-lines: 47
 
     from pankoff.base import Container
     from pankoff.combinator import combine
@@ -29,6 +29,9 @@ Now lets load it:
         def __setup__(self, amount, currency):
             self.amount = amount
             self.currency = currency
+
+        def mutate(self, instance, value):
+            return f"{instance.name} salary is: {value}"
 
         def validate(self, instance, value):
             amount, currency = value.split()
@@ -54,14 +57,14 @@ Now lets load it:
         )
         position = Predicate(
             # NOTE: we can use `salary` field at this point
-            predicate=lambda instance, value: value == "Manager" and instance.salary == "100 USD",
+            predicate=lambda instance, value: value == "Manager" and "100 USD" in instance.salary,
             error_message="Invalid value for {field_name}, person got into wrong position: {value}"
         )
         payment = Alias("salary")
         job_desc = LazyLoad(factory=lambda instance: f"{instance.position} at {instance.office}")
 
     person = Person.from_path("data.json")
-    print(person)  # Person(name=Yaroslav, age=22, salary=100 USD, office=Central Office, position=Manager, job_desc=Manager at Central Office)
+    print(person)  # Person(name=Yaroslav, age=22, salary=Yaroslav salary is: 100 USD, office=Central Office, position=Manager, job_desc=Manager at Central Office)
 
 Trying invalid data. Change your ``data.json``:
 

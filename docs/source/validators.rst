@@ -93,6 +93,8 @@ You can define you ows validator by subclassing ``BaseValidator``.
 >>> class EnumValidator(BaseValidator):
 ...     def __setup__(self, allowed_values):
 ...         self.allowed_values = allowed_values
+...     def mutate(self, instance, value):
+...         return f"Mutated value: {value}"
 ...     def validate(self, instance, value):
 ...         if value not in self.allowed_values:
 ...             raise ValidationError(
@@ -100,4 +102,7 @@ You can define you ows validator by subclassing ``BaseValidator``.
 ...                 f"got {value}"
 ...             )
 
-It is required for validators to define ``validate``, but ``__setup__`` is optional.
+It is required for validators to define ``validate``, but ``__setup__`` and `mutate` is optional.
+
+You can use ``mutate`` to modify returned value when its being accessed. It won't be cached, ``mutate`` is re-calculated on every
+attribute access.
