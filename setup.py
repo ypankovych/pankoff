@@ -3,7 +3,7 @@ See documentation at https://pankoff.rtfd.io/
 """
 from distutils.core import setup
 
-version = "14.0"
+version = "15.0"
 setup(
     name='pankoff',
     packages=['pankoff'],
