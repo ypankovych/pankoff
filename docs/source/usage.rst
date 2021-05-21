@@ -74,7 +74,7 @@ Now lets load it:
     print(person)  # Person(name=Yaroslav, age=22, salary=Yaroslav salary is: 100 USD, office=Central Office, position=Manager, job_desc=Manager at Central Office)
     print(person.greeting)  # Hello, Yaroslav
 
-Trying invalid data:
+Trying invalid data
 -----------------------------------------------
 Change your ``data.json``
 
