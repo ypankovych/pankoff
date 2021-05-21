@@ -47,7 +47,9 @@ class Container:
     def is_valid(cls, data):
         """
         Validate data
-        :param data:
+        :param data: data to validate
+        :type data: dict
+
         :return: ``True/False``
         """
         try:
