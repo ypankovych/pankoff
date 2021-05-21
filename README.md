@@ -10,7 +10,7 @@
 [![PyPI implementation](https://img.shields.io/pypi/implementation/pankoff.svg)](https://pypi.python.org/pypi/pankoff/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-Light weight, flexible, easy to use validation tool. Pure Python, no dependencies.
+Lightweight, flexible, easy to use validation tool. Pure Python, no dependencies.
 
 `pip install --user pankoff`
 
