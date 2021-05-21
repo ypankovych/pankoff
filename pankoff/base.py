@@ -23,7 +23,7 @@ class Container:
         field_names = ", ".join(
             f"{field.field_name}={getattr(self, field.field_name)}"
             for field in vars(type(self)).values()
-            if isinstance(field, BaseValidator) or is_combinator(field)
+            if isinstance(field, BaseValidator)
         )
         return f"{type(self).__name__}({field_names})"
 
