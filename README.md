@@ -6,6 +6,9 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/ypankovych/pankoff/graphs/commit-activity)
 [![MIT License](https://img.shields.io/pypi/l/pankoff.svg)](https://opensource.org/licenses/MIT)
 [![PyPi status](https://img.shields.io/pypi/status/pankoff.svg)](https://pypi.python.org/pypi/pankoff)
+[![PyPI version fury.io](https://badge.fury.io/py/pankoff.svg)](https://pypi.python.org/pypi/pankoff/)
+[![PyPI implementation](https://img.shields.io/pypi/implementation/pankoff.svg)](https://pypi.python.org/pypi/pankoff/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
 Light weight, flexible, easy to use validation tool. Pure Python, no dependencies.
 
