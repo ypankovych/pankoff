@@ -72,6 +72,7 @@ Now lets load it:
     print(person.greeting)  # Hello, Yaroslav
 
 Trying invalid data. Change your ``data.json``:
+-----------------------------------------------
 
 .. code-block:: JSON
     :emphasize-lines: 6
@@ -92,7 +93,8 @@ Traceback (most recent call last):
 ...
 pankoff.exceptions.ValidationError: ['Invalid value for position, person got into wrong position: HR']
 
-Lets do some transformations:
+Lets do some transformations
+----------------------------
 
 Here's our ``data.json``:
 
