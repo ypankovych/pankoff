@@ -1,5 +1,8 @@
-Usage example
-*************
+Usage examples
+**************
+
+Basic usage
+-----------
 Lets create ``data.json`` as following:
 
 .. code-block:: JSON
@@ -71,8 +74,9 @@ Now lets load it:
     print(person)  # Person(name=Yaroslav, age=22, salary=Yaroslav salary is: 100 USD, office=Central Office, position=Manager, job_desc=Manager at Central Office)
     print(person.greeting)  # Hello, Yaroslav
 
-Trying invalid data. Change your ``data.json``:
+Trying invalid data:
 -----------------------------------------------
+Change your ``data.json``
 
 .. code-block:: JSON
     :emphasize-lines: 6
