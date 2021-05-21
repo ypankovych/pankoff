@@ -10,6 +10,10 @@ from pankoff.exceptions import ValidationError
 # CAUTION!!! do not touch anything here
 
 
+def is_combinator(obj):
+    return getattr(obj, "__combinator__", False)
+
+
 class Container:
 
     def __repr__(self):
@@ -19,7 +23,7 @@ class Container:
         field_names = ", ".join(
             f"{field.field_name}={getattr(self, field.field_name)}"
             for field in vars(type(self)).values()
-            if isinstance(field, BaseValidator)
+            if isinstance(field, BaseValidator) or is_combinator(field)
         )
         return f"{type(self).__name__}({field_names})"
 
@@ -156,14 +160,14 @@ def _invalidate_call_cache(instance, target):
 
 class ExtendedABCMeta(ABCMeta):
     def __and__(self, other):
-        if getattr(self, "__combinator__", False):
+        if is_combinator(self):
             bases = self.__bases__
             bases += (other,)
             return combine(*bases)
         return combine(self, other)
 
     def __repr__(self):
-        if getattr(self, "__combinator__", False):
+        if is_combinator(self):
             validator_names = ", ".join(v.__name__ for v in self._validators)
             return f"Combination of ({validator_names}) validators"
         return super(ExtendedABCMeta, self).__repr__()

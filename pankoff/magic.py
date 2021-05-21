@@ -1,4 +1,4 @@
-from pankoff.base import BaseValidator
+from pankoff.base import BaseValidator, is_combinator
 from pankoff.validators import UNSET, LazyLoad
 
 init_template = "def __init__({arguments}):\n\t{assignments}"
@@ -74,7 +74,7 @@ def autoinit(klass=None, verbose=False, merge=False):
         assignments = []
         namespace = {"UNSET": UNSET}
         for attr in vars(cls).values():
-            if isinstance(attr, BaseValidator):
+            if isinstance(attr, BaseValidator) or is_combinator(attr):
                 if not isinstance(attr, LazyLoad):
                     attrs.append(attr.field_name)
                 if isinstance(attr, LazyLoad):
