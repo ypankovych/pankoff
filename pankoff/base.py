@@ -23,6 +23,9 @@ class Container:
         )
         return f"{type(self).__name__}({field_names})"
 
+    def __iter__(self):
+        return iter(self.asdict().items())
+
     @classmethod
     def from_dict(cls, data):
         """
@@ -86,6 +89,58 @@ class Container:
         :raises: ValidationError
         """
         return cls.from_dict(data)
+
+    def asdict(self, /, dump_aliases=False):
+        """
+        Dump your object do a dict. Dumps only validator fields and aliases.
+
+        :param obj: object to dump
+        :param dump_aliases: if ``True``, dump alias fields as well, defaults to ``False``
+
+        :type dump_aliases: bool
+        :return: dict
+
+        >>> Person(...).asdict(dump_aliases=True)
+        """
+        ret = {}
+        obj_type = type(self)
+        bases = (BaseValidator,)
+        if dump_aliases:
+            from pankoff.magic import Alias
+            bases += (Alias,)
+        for name, field in vars(obj_type).items():
+            if isinstance(field, bases):
+                ret[name] = getattr(self, name)
+        return ret
+
+    def asjson(self, /, dump_aliases=False, dumps=json.dumps, **kwargs):
+        """
+        Same as ``asdict``, but returns JSON string.
+
+        :param obj: object to dump
+        :param dump_aliases: if ``True``, dump alias fields as well, defaults to ``False``
+        :param dumps: callable to use on dump, defaults to ``json.dumps``
+        :param kwargs: keyword arguments will be propagated to ``dumps``
+        :return: JSON string
+
+        >>> Person(...).asjson(dump_aliases=True, indent=4)
+        """
+        return dumps(self.asdict(dump_aliases=dump_aliases), **kwargs)
+
+    def to_path(self, /, path, dump_aliases=False, dumps=json.dumps, **kwargs):
+        """
+        Dump current instance to a file.
+        :param path: path to dump to
+        :type path: str
+
+        :param dump_aliases: if ``True``, dump alias fields as well, defaults to ``False``
+        :param dumps: callable to use on dump, defaults to ``json.dumps``
+        :param kwargs: keyword arguments will be propagated to ``dumps``
+
+        >>> Person(...).to_path("path/to/data.json", dump_aliases=True, indent=4)
+        """
+        with open(path, "w") as fp:
+            fp.write(self.asjson(dump_aliases=dump_aliases, dumps=dumps, **kwargs))
 
 
 def _invalidate_call_cache(instance, target):

@@ -91,3 +91,52 @@ Now load it:
 Traceback (most recent call last):
 ...
 pankoff.exceptions.ValidationError: ['Invalid value for position, person got into wrong position: HR']
+
+Lets do some transformations:
+
+Here's our ``data.json``:
+
+.. code-block:: JSON
+
+    {
+        "name": "Yaroslav",
+        "salary": "100 USD",
+        "kind": 1
+    }
+
+
+.. code-block:: python
+    :emphasize-lines: 22
+
+    kinds = {
+        1: "Good person",
+        2: "Bad person"
+    }
+
+    class KindMutator(BaseValidator):
+
+        def validate(self, instance, value):
+            if value not in kinds:
+                raise ValidationError(f"Person kind should be in {kinds.keys()}")
+
+        def mutate(self, instance, value):
+            return kinds[value]
+
+
+    @autoinit
+    class Person(Container):
+        name = String()
+        salary = Salary(amount=100, currency="USD")
+        kind = KindMutator()
+
+    Person.from_path("data.json").to_path("mutated_data.json", indent=4)
+
+And here's what we get in ``mutated_data.json``:
+
+.. code-block:: JSON
+
+    {
+        "name": "Yaroslav",
+        "salary": "Yaroslav salary is: 100 USD",
+        "kind": "Good person"
+    }
