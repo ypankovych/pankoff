@@ -12,6 +12,8 @@
 
 Lightweight, flexible, easy to use validation tool. Pure Python, no dependencies.
 
+Validate, mutate, serialize and deserialize with lots of magic.
+
 `pip install --user pankoff`
 
 Read full [documentation here.](https://pankoff.readthedocs.io/)
