@@ -19,7 +19,10 @@ def combine(*validators, **kwargs):
     try:
         klass = ExtendedABCMeta(
             "CombinedValidator",
-            validators,
+            tuple(
+                type(validator.__name__, (validator,), {})
+                for validator in validators
+            ),
             {"__repr__": __repr__}
         )
     except TypeError as exc:
