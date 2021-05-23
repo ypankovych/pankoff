@@ -69,7 +69,7 @@ class KindMutator(BaseValidator):
 class Person(Container):
     name = String()
     salary = Salary(amount=100, currency="USD")
-    kind = combine(KindMutator, Number)()
+    kind = combine(Number, KindMutator)()
 
 
 if __name__ == "__main__":
