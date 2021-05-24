@@ -182,6 +182,4 @@ It is possible to make object factory based on the same Container class.
 
 As you can see, ``young_person`` and ``old_person`` acting like completely different things, by in fact they're not.
 
-Keep in mind that ``.extra(...)`` returns wrapper, so if you want to access underlying class, you should do ``young_person.cls``.
-
 Also, you can access underlying ``extra`` structure by doing ``yaroslav._extra``, which returns ``MappingProxyType`` view.

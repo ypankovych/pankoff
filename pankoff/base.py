@@ -54,14 +54,14 @@ class Container:
         :param kwargs: arguments to set on instancee before ``__init__`` call
         """
 
-        def _extra_wrapper(*args, **kw):
-            instance = cls.__new__(cls)
-            instance._extra = MappingProxyType(kwargs)
-            instance.__init__(*args, **kw)
-            return instance
+        class _ExtraMeta(type):
+            def __call__(cls, *args, **kw):
+                instance = cls.__new__(cls, *args, **kw)
+                instance._extra = MappingProxyType(kwargs)
+                instance.__init__(*args, **kw)
+                return instance
 
-        _extra_wrapper.cls = cls
-        return _extra_wrapper
+        return _ExtraMeta(cls.__name__, (cls,), dict(vars(cls)))
 
     def get_extra(self, key, default=UNSET):
         try:
