@@ -141,6 +141,21 @@ class Container:
         """
         return self.dumps(dump_aliases=dump_aliases, dumps=json.dumps, **kwargs)
 
+    def asyaml(self,  /, dump_aliases=False, **kwargs):
+        """
+        Dump object to YAML. Works only if PyYAML is installed.
+        :param dump_aliases: if ``True``, dump alias fields as well, defaults to ``False``
+        :param kwargs: keyword arguments will be propagated to ``dumps``
+        :return: YAML string
+        """
+        try:
+            import yaml
+        except ImportError as exc:
+            raise RuntimeError(
+                "You should have https://pypi.org/project/PyYAML/ installed in order to do this action"
+            ) from exc
+        return self.dumps(dump_aliases=dump_aliases, dumps=yaml.dump, **kwargs)
+
     def to_path(self, /, path, dump_aliases=False, dumps=json.dumps, **kwargs):
         """
         Dump current instance to a file.
