@@ -133,7 +133,6 @@ class Container:
         """
         Same as ``asdict``, but returns JSON string.
 
-        :param obj: object to dump
         :param dump_aliases: if ``True``, dump alias fields as well, defaults to ``False``
         :param dumps: callable to use on dump, defaults to ``json.dumps``
         :param kwargs: keyword arguments will be propagated to ``dumps``
