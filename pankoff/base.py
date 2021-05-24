@@ -32,6 +32,33 @@ class Container:
         return iter(self.asdict().items())
 
     @classmethod
+    def extra(cls, **kwargs):
+        """
+        Add extra setup for your class future instances.
+        This way you can create "temporary" objects, a.k.a factories.
+
+        >>> fast_person = Person.extra(walk_speed=150)
+        >>> slow_person = Person.extra(walk_speed=10)
+
+        >>> yaroslav = fast_person(...)
+        >>> john = slow_person(...)
+
+        >>> print(yaroslav.walk_speed)  # 150
+        >>> print(john.walk_speed)  # 10
+
+        NOTE: extra args set at very beginning of instance setup, before any ``__init__``/etc
+
+        :param kwargs: arguments to set on instancee before ``__init__`` call
+        """
+        def _extra_wrapper(*args, **kw):
+            instance = cls.__new__(cls)
+            for k, v in kwargs.items():
+                setattr(instance, k, v)
+            instance.__init__(*args, **kw)
+            return instance
+        return _extra_wrapper
+
+    @classmethod
     def from_dict(cls, data):
         """
         Make on object from dictionary.
