@@ -196,6 +196,9 @@ class _Descriptor:
 class BaseValidator(_Descriptor, metaclass=ExtendedABCMeta):
 
     def __init_subclass__(cls, **kwargs):
+        """
+        Wrap all required methods into cache wrappers to prevent duplicate invocations.
+        """
         def __cached_wrapper(func):
             @functools.wraps(func)
             def __inner(*args, **kw):
@@ -248,6 +251,10 @@ class BaseValidator(_Descriptor, metaclass=ExtendedABCMeta):
         super(base, self).__set__(instance, value, __mro__=__mro__, errors=errors)
 
     def __get__(self, instance, owner, __mro__=None, value=UNSET):
+        """
+        Call entire chain of mutators and propagate value to each of them.
+        E.g: mutate(mutate(mutate(value))) and so on.
+        """
         value = vars(instance)[self.field_name] if value is UNSET else value
         if not __mro__:
             __mro__ = type(self).mro()

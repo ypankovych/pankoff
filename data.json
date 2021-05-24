@@ -1,7 +1,6 @@
 {
-  "name": "Yaroslav",
-  "age": 22,
-  "salary": 100,
-  "office": "Central Office",
-  "position": "Manager"
+    "name": "Yaroslav",
+    "salary": "100 USD",
+    "kind": 1,
+    "num": 10
 }
