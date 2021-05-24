@@ -123,9 +123,12 @@ class Container:
     def dumps(self, dumps, dump_aliases=False, **kwargs):
         """
         Dump current object using provided dumper, e.g ``yaml.dump`` or ``json.dumps``.
+
         :param dumps: callable to use on dump, defaults to ``json.dumps``
         :param dump_aliases: if ``True``, dump alias fields as well, defaults to ``False``
         :param kwargs: keyword arguments will be propagated to ``dumps``
+
+        >>> Person.dumps(yaml.dump, dump_aliases=True)
         """
         return dumps(self.asdict(dump_aliases), **kwargs)
 
@@ -144,9 +147,12 @@ class Container:
     def asyaml(self,  /, dump_aliases=False, **kwargs):
         """
         Dump object to YAML. Works only if PyYAML is installed.
+
         :param dump_aliases: if ``True``, dump alias fields as well, defaults to ``False``
         :param kwargs: keyword arguments will be propagated to ``dumps``
         :return: YAML string
+
+        >>> Person.asyaml(dump_aliases=True)
         """
         try:
             import yaml
