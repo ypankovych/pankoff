@@ -44,8 +44,8 @@ class Container:
         >>> yaroslav = fast_person(...)
         >>> john = slow_person(...)
 
-        >>> print(yaroslav.walk_speed)  # 150
-        >>> print(john.walk_speed)  # 10
+        >>> print(yaroslav.get_extra("walk_speed"))  # 150
+        >>> print(john.get_extra("walk_speed"))  # 10
 
         NOTE: extra args set at very beginning of instance setup, before any ``__init__``/etc
 
