@@ -178,8 +178,8 @@ It is possible to make object factory based on the same Container class.
     yaroslav = old_person(name="yaroslav", age=10)
 
     print(john)  # Person(name=John, age=20)
-    print(yaroslav)  # Person(name=yaroslav, age=50
+    print(yaroslav)  # Person(name=yaroslav, age=50)
 
-As you can see, ``young_person`` and ``old_person`` acting like completely different things, by in fact they're not.
+As you can see, ``young_person`` and ``old_person`` acting like completely different things, but in fact they're not.
 
 Also, you can access underlying ``extra`` structure by doing ``yaroslav._extra``, which returns ``MappingProxyType`` view.
