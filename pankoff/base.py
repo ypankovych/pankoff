@@ -49,6 +49,8 @@ class Container:
 
         NOTE: extra args set at very beginning of instance setup, before any ``__init__``/etc
 
+        See example: :ref:`Making factories`
+
         :param kwargs: arguments to set on instancee before ``__init__`` call
         """
 

@@ -147,8 +147,10 @@ And here's what we get in ``mutated_data.json``:
         "kind": "Good person"
     }
 
-Making object factory
----------------------
+.. _Making factories:
+
+Making object factories
+-----------------------
 
 It is possible to make object factory based on the same Container class.
 
@@ -179,3 +181,7 @@ It is possible to make object factory based on the same Container class.
     print(yaroslav)  # Person(name=yaroslav, age=50
 
 As you can see, ``young_person`` and ``old_person`` acting like completely different things, by in fact they're not.
+
+Keep in mind that ``.extra(...)`` returns wrapper, so if you want to access underlying class, you should do ``young_person.cls``.
+
+Also, you can access underlying ``extra`` structure by doing ``yaroslav._extra``, which returns ``MappingProxyType`` view.
