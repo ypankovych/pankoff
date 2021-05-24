@@ -129,18 +129,17 @@ class Container:
         """
         return dumps(self.asdict(dump_aliases), **kwargs)
 
-    def asjson(self, /, dump_aliases=False, dumps=json.dumps, **kwargs):
+    def asjson(self, /, dump_aliases=False, **kwargs):
         """
         Same as ``asdict``, but returns JSON string.
 
         :param dump_aliases: if ``True``, dump alias fields as well, defaults to ``False``
-        :param dumps: callable to use on dump, defaults to ``json.dumps``
         :param kwargs: keyword arguments will be propagated to ``dumps``
         :return: JSON string
 
         >>> Person(...).asjson(dump_aliases=True, indent=4)
         """
-        return self.dumps(dump_aliases=dump_aliases, dumps=dumps, **kwargs)
+        return self.dumps(dump_aliases=dump_aliases, dumps=json.dumps, **kwargs)
 
     def to_path(self, /, path, dump_aliases=False, dumps=json.dumps, **kwargs):
         """
