@@ -2,6 +2,7 @@ import functools
 import inspect
 import json
 from abc import ABCMeta, abstractmethod
+from types import MappingProxyType
 
 from pankoff.combinator import combine
 from pankoff.exceptions import ValidationError
@@ -50,12 +51,14 @@ class Container:
 
         :param kwargs: arguments to set on instancee before ``__init__`` call
         """
+
         def _extra_wrapper(*args, **kw):
             instance = cls.__new__(cls)
-            for k, v in kwargs.items():
-                setattr(instance, k, v)
+            instance.extra = MappingProxyType(kwargs)
             instance.__init__(*args, **kw)
             return instance
+
+        _extra_wrapper.cls = cls
         return _extra_wrapper
 
     @classmethod
@@ -171,7 +174,7 @@ class Container:
         """
         return self.dumps(dump_aliases=dump_aliases, dumps=json.dumps, **kwargs)
 
-    def asyaml(self,  /, dump_aliases=False, **kwargs):
+    def asyaml(self, /, dump_aliases=False, **kwargs):
         """
         Dump object to YAML. Works only if PyYAML is installed.
 
@@ -254,6 +257,7 @@ class BaseValidator(_Descriptor, metaclass=ExtendedABCMeta):
         """
         Wrap all required methods into cache wrappers to prevent duplicate invocations.
         """
+
         def __cached_wrapper(func):
             @functools.wraps(func)
             def __inner(*args, **kw):

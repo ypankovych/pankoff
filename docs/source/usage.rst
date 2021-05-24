@@ -146,3 +146,36 @@ And here's what we get in ``mutated_data.json``:
         "salary": "Yaroslav salary is: 100 USD",
         "kind": "Good person"
     }
+
+Making object factory
+---------------------
+
+It is possible to make object factory based on the same Container class.
+
+.. code-block:: python
+
+    class Multiplication(BaseValidator):
+
+        def validate(self, instance, value):
+            if not isinstance(value, (int, float)):
+                raise ValidationError(f"`{self.field_name}` should be a number")
+
+        def mutate(self, instance, value):
+            return value * instance.extra["multiplicator"]
+
+    @autoinit
+    class Person(Container):
+        name = String()
+        age = Multiplication()
+
+
+    young_person = Person.extra(multiplicator=2)
+    old_person = Person.extra(multiplicator=5)
+
+    john = young_person(name="John", age=10)
+    yaroslav = old_person(name="yaroslav", age=10)
+
+    print(john)  # Person(name=John, age=20)
+    print(yaroslav)  # Person(name=yaroslav, age=50
+
+As you can see, ``young_person`` and ``old_person`` acting like completely different things, by in fact they're not.
