@@ -6,8 +6,9 @@ from abc import ABCMeta, abstractmethod
 from pankoff.combinator import combine
 from pankoff.exceptions import ValidationError
 
-
 # CAUTION!!! do not touch anything here
+
+UNSET = object()
 
 
 def is_combinator(obj):
@@ -187,6 +188,10 @@ class _Descriptor:
             raise ValidationError(errors)
         vars(instance)[self.field_name] = value
 
+    def __get__(self, instance, owner, __mro__, value):
+        _invalidate_call_cache(self, target="mutate")
+        return value
+
 
 class BaseValidator(_Descriptor, metaclass=ExtendedABCMeta):
 
@@ -201,7 +206,7 @@ class BaseValidator(_Descriptor, metaclass=ExtendedABCMeta):
             __inner.__wrapped__ = func
             return __inner
 
-        for func_name in ("__setup__", "validate"):
+        for func_name in ("__setup__", "validate", "mutate"):
             if hasattr(cls, func_name):
                 setattr(cls, func_name, __cached_wrapper(getattr(cls, func_name)))
 
@@ -242,12 +247,20 @@ class BaseValidator(_Descriptor, metaclass=ExtendedABCMeta):
                     raise
         super(base, self).__set__(instance, value, __mro__=__mro__, errors=errors)
 
-    def __get__(self, instance, owner):
-        value = vars(instance)[self.field_name]
-        mutated = self.mutate(instance, value)
-        if mutated is NotImplemented:
-            mutated = value
-        return mutated
+    def __get__(self, instance, owner, __mro__=None, value=UNSET):
+        value = vars(instance)[self.field_name] if value is UNSET else value
+        if not __mro__:
+            __mro__ = type(self).mro()
+        base, __mro__ = __mro__[0], __mro__[1:]
+        if not getattr(base.mutate, "__called__", False):
+            try:
+                ret = base.mutate(self, instance, value)
+                if ret is not NotImplemented:
+                    value = ret
+            except Exception:
+                _invalidate_call_cache(self, target="mutate")
+                raise
+        return super(base, self).__get__(instance, owner, __mro__=__mro__, value=value)
 
     def __setup__(self, *args, **kwargs):
         return NotImplemented
