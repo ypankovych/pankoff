@@ -54,12 +54,20 @@ class Container:
 
         def _extra_wrapper(*args, **kw):
             instance = cls.__new__(cls)
-            instance.extra = MappingProxyType(kwargs)
+            instance._extra = MappingProxyType(kwargs)
             instance.__init__(*args, **kw)
             return instance
 
         _extra_wrapper.cls = cls
         return _extra_wrapper
+
+    def get_extra(self, key, default=UNSET):
+        try:
+            return self._extra[key]
+        except KeyError:
+            if default is not UNSET:
+                return default
+            raise
 
     @classmethod
     def from_dict(cls, data):

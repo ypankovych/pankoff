@@ -161,7 +161,7 @@ It is possible to make object factory based on the same Container class.
                 raise ValidationError(f"`{self.field_name}` should be a number")
 
         def mutate(self, instance, value):
-            return value * instance.extra["multiplicator"]
+            return value * instance.get_extra("multiplicator", default=1)
 
     @autoinit
     class Person(Container):
