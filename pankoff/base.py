@@ -120,6 +120,15 @@ class Container:
                 ret[name] = getattr(self, name)
         return ret
 
+    def dumps(self, dumps, dump_aliases=False, **kwargs):
+        """
+        Dump current object using provided dumper, e.g ``yaml.dump`` or ``json.dumps``.
+        :param dumps: callable to use on dump, defaults to ``json.dumps``
+        :param dump_aliases: if ``True``, dump alias fields as well, defaults to ``False``
+        :param kwargs: keyword arguments will be propagated to ``dumps``
+        """
+        return dumps(self.asdict(dump_aliases), **kwargs)
+
     def asjson(self, /, dump_aliases=False, dumps=json.dumps, **kwargs):
         """
         Same as ``asdict``, but returns JSON string.
@@ -132,7 +141,7 @@ class Container:
 
         >>> Person(...).asjson(dump_aliases=True, indent=4)
         """
-        return dumps(self.asdict(dump_aliases=dump_aliases), **kwargs)
+        return self.dumps(dump_aliases=dump_aliases, dumps=dumps, **kwargs)
 
     def to_path(self, /, path, dump_aliases=False, dumps=json.dumps, **kwargs):
         """
@@ -147,7 +156,7 @@ class Container:
         >>> Person(...).to_path("path/to/data.json", dump_aliases=True, indent=4)
         """
         with open(path, "w") as fp:
-            fp.write(self.asjson(dump_aliases=dump_aliases, dumps=dumps, **kwargs))
+            fp.write(self.dumps(dump_aliases=dump_aliases, dumps=dumps, **kwargs))
 
 
 def _invalidate_call_cache(instance, target):
