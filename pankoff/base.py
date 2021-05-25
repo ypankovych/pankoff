@@ -137,7 +137,7 @@ class Container:
         """
         return cls.from_dict(data)
 
-    def asdict(self, /, dump_aliases=False):
+    def asdict(self, dump_aliases=False):
         """
         Dump your object do a dict. Dumps only validator fields and aliases.
 
@@ -172,7 +172,7 @@ class Container:
         """
         return dumps(self.asdict(dump_aliases), **kwargs)
 
-    def asjson(self, /, dump_aliases=False, **kwargs):
+    def asjson(self, dump_aliases=False, **kwargs):
         """
         Same as ``asdict``, but returns JSON string.
 
@@ -184,7 +184,7 @@ class Container:
         """
         return self.dumps(dump_aliases=dump_aliases, dumps=json.dumps, **kwargs)
 
-    def asyaml(self, /, dump_aliases=False, **kwargs):
+    def asyaml(self, dump_aliases=False, **kwargs):
         """
         Dump object to YAML. Works only if PyYAML is installed.
 
@@ -202,7 +202,7 @@ class Container:
             ) from exc
         return self.dumps(dump_aliases=dump_aliases, dumps=yaml.dump, **kwargs)
 
-    def to_path(self, /, path, dump_aliases=False, dumps=json.dumps, **kwargs):
+    def to_path(self, path, dump_aliases=False, dumps=json.dumps, **kwargs):
         """
         Dump current instance to a file.
         :param path: path to dump to
