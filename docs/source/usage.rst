@@ -210,7 +210,7 @@ Lets say you want to create a mixin, normally you'd do:
             self.name = name
 
     person = Person("Yaroslav")
-    print(person.say())  # hello, my name is Yaroslav
+    print(person.say())  # My name is Yaroslav !!!
 
 As you can see, we're using ``super()`` here. Magic mixins allows you to avoid that, e.g:
 
@@ -234,7 +234,7 @@ As you can see, we're using ``super()`` here. Magic mixins allows you to avoid t
             self.name = name
 
     person = Person("Yaroslav")
-    print(person.say())  # hello, my name is Yaroslav
+    print(person.say())  # My name is Yaroslav !!!
 
 So the idea is, when you have same method names in both mixin and its parent, mixin will consume parents' value implicitly.
 
