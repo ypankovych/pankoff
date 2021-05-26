@@ -192,6 +192,7 @@ Magic mixins
 Lets say you want to create a mixin, normally you'd do:
 
 .. code-block:: python
+    :emphasize-lines: 4
 
     class HelloMixin:
 
@@ -214,6 +215,7 @@ Lets say you want to create a mixin, normally you'd do:
 As you can see, we're using ``super()`` here. Magic mixins allows you to avoid that, e.g:
 
 .. code-block:: python
+    :emphasize-lines: 5
 
     from pankoff.magic import MagicMixin
 
