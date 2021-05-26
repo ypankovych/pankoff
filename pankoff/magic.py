@@ -1,3 +1,6 @@
+import inspect
+import textwrap
+
 from pankoff.base import BaseValidator
 from pankoff.validators import UNSET, LazyLoad
 
@@ -101,6 +104,48 @@ def autoinit(klass=None, verbose=False, merge=False):
     if klass is not None:
         return inner(klass)
     return inner
+
+
+def _replace_method(method):
+    ns = {
+        "UNSET": UNSET,
+        "method": method
+    }
+    mixin_method_template = textwrap.dedent("""
+    def mixed_method_{method_name}(self, *args, **kwargs):
+        parent = eval(f"getattr(super(klass, self), '{method_name}', UNSET)")
+        if parent is UNSET:
+            return method(self, *args, **kwargs)
+        else:
+            return method(self, parent(*args, **kwargs))
+    """)
+    exec(mixin_method_template.format(method_name=method.__name__), ns)
+    return ns[f"mixed_method_{method.__name__}"], ns
+
+
+class MixinMeta(type):
+
+    def __new__(mcs, name, bases, namespace):
+        nss = []
+        if all(issubclass(base, MagicMixin) for base in bases):
+            for k, v in namespace.items():
+                if inspect.isfunction(v) or isinstance(v, classmethod):
+                    new_f, ns = _replace_method(v)
+                    namespace[k] = new_f
+                    nss.append(ns)
+        klass = super().__new__(mcs, name, bases, namespace)
+        for ns in nss:
+            ns["klass"] = klass
+        return klass
+
+
+class MagicMixin(metaclass=MixinMeta):
+    """
+    Create ``MagicMixin`` by inheriting from it.
+
+    See examples: :ref:`magic mixins`
+    """
+    pass
 
 
 class Alias:

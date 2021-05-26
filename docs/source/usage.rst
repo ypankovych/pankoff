@@ -183,3 +183,64 @@ It is possible to make object factory based on the same Container class.
 As you can see, ``young_person`` and ``old_person`` acting like completely different things, but in fact they're not.
 
 Also, you can access underlying ``extra`` structure by doing ``yaroslav._extra``, which returns ``MappingProxyType`` view.
+
+.. _Magic mixins:
+
+Magic mixins
+------------
+
+Lets say you want to create a mixin, normally you'd do:
+
+.. code-block:: python
+
+    class HelloMixin:
+
+        def say(self):
+            value = super().say()
+            return f"My name is {value} !!!"
+
+
+    class Hello:
+
+        def say(self):
+            return self.name
+
+
+    class Person(HelloMixin, Hello):
+        def __init__(self, name):
+            self.name = name
+
+    person = Person("Yaroslav")
+    print(person.say())  # hello, my name is Yaroslav
+
+As you can see, we're using ``super()`` here. Magic mixins allows you to avoid that, e.g:
+
+.. code-block:: python
+
+    from pankoff.magic import MagicMixin
+
+    class HelloMixin(MagicMixin):
+
+        def say(self, value):
+            return f"My name is {value} !!!"
+
+
+    class Hello:
+
+        def say(self):
+            return self.name
+
+
+    class Person(HelloMixin, Hello):
+        def __init__(self, name):
+            self.name = name
+
+
+    person = Person("Yaroslav")
+    print(person.say())  # hello, my name is Yaroslav
+
+So the idea is, when you have same method names in both mixin and its parent, mixin will consume parents' value implicitly.
+
+In the example above, ``value`` parameter for ``HelloMixin`` is the result ``say`` method on ``Hello`` class.
+
+Note that it'll chain through all the mixins in MRO.
