@@ -199,12 +199,10 @@ Lets say you want to create a mixin, normally you'd do:
             value = super().say()
             return f"My name is {value} !!!"
 
-
     class Hello:
 
         def say(self):
             return self.name
-
 
     class Person(HelloMixin, Hello):
         def __init__(self, name):
@@ -224,17 +222,14 @@ As you can see, we're using ``super()`` here. Magic mixins allows you to avoid t
         def say(self, value):
             return f"My name is {value} !!!"
 
-
     class Hello:
 
         def say(self):
             return self.name
 
-
     class Person(HelloMixin, Hello):
         def __init__(self, name):
             self.name = name
-
 
     person = Person("Yaroslav")
     print(person.say())  # hello, my name is Yaroslav
