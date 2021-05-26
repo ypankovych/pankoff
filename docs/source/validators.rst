@@ -15,6 +15,70 @@ By default, Pankoff defines a few validators, ``String``, ``Number``, ``Type``, 
 
     >>> person = Person(name="Guido")
 
+.. autoclass:: pankoff.validators.List()
+
+    >>> @autoinit
+    >>> class Person:
+    ...     items  = List()
+
+    >>> person = Person(items=[1, 2, 3])
+
+.. autoclass:: pankoff.validators.Dict(required_keys=None)
+
+    >>> @autoinit
+    >>> class Person:
+    ...     mapping  = Dict(required_keys=["name"])
+
+    >>> person = Person(mapping={"name": "Guido"})
+
+.. autoclass:: pankoff.validators.Tuple()
+
+    >>> @autoinit
+    >>> class Person:
+    ...     items  = Tuple()
+
+    >>> person = Person(items=(1, 2, 3))
+
+.. autoclass:: pankoff.validators.Iterable()
+
+.. autoclass:: pankoff.validators.Container()
+
+.. autoclass:: pankoff.validators.Hashable()
+
+.. autoclass:: pankoff.validators.Iterator()
+
+.. autoclass:: pankoff.validators.Reversible()
+
+.. autoclass:: pankoff.validators.Generator()
+
+.. autoclass:: pankoff.validators.Callable()
+
+.. autoclass:: pankoff.validators.Collection()
+
+.. autoclass:: pankoff.validators.Sequence()
+
+.. autoclass:: pankoff.validators.MutableSequence()
+
+.. autoclass:: pankoff.validators.ByteString()
+
+.. autoclass:: pankoff.validators.Set()
+
+.. autoclass:: pankoff.validators.MutableSet()
+
+.. autoclass:: pankoff.validators.Mapping()
+
+.. autoclass:: pankoff.validators.MutableMapping()
+
+.. autoclass:: pankoff.validators.Awaitable()
+
+.. autoclass:: pankoff.validators.Coroutine()
+
+.. autoclass:: pankoff.validators.AsyncIterable()
+
+.. autoclass:: pankoff.validators.AsyncIterator()
+
+.. autoclass:: pankoff.validators.AsyncGenerator()
+
 .. autoclass:: pankoff.validators.Number(mix_value=None, max_value=None)
 
     >>> @autoinit

@@ -1,9 +1,33 @@
+import collections.abc
 import numbers
 
 from pankoff.base import BaseValidator
 from pankoff.exceptions import ValidationError
 
 UNSET = object()
+
+primitive_types = (
+    collections.abc.Container,
+    collections.abc.Hashable,
+    collections.abc.Iterable,
+    collections.abc.Iterator,
+    collections.abc.Reversible,
+    collections.abc.Generator,
+    collections.abc.Callable,
+    collections.abc.Collection,
+    collections.abc.Sequence,
+    collections.abc.MutableSequence,
+    collections.abc.ByteString,
+    collections.abc.Set,
+    collections.abc.MutableSet,
+    collections.abc.Mapping,
+    collections.abc.MutableMapping,
+    collections.abc.Awaitable,
+    collections.abc.Coroutine,
+    collections.abc.AsyncIterable,
+    collections.abc.AsyncIterator,
+    collections.abc.AsyncGenerator,
+)
 
 
 class Sized(BaseValidator):
@@ -34,10 +58,13 @@ class Type(BaseValidator):
     """
 
     def __setup__(self, types):
-        self.types = types
+        if hasattr(self, "types"):
+            self.types += types
+        else:
+            self.types = types
 
     def validate(self, instance, value):
-        if not isinstance(value, self.types):
+        if not all(isinstance(value, type_) for type_ in self.types):
             types_names = ", ".join(type_.__name__ for type_ in self.types)
             raise ValidationError(
                 f"Attribute `{self.field_name}` should be an instance of `{types_names}`"
@@ -50,6 +77,41 @@ class String(Type):
     """
 
     def __setup__(self, types=(str,)):
+        Type.__setup__(self, types)
+
+
+class List(Type):
+    """
+    Validate whether field is instance of type ``list``.
+    """
+
+    def __setup__(self, types=(list,)):
+        Type.__setup__(self, types)
+
+
+class Dict(Type):
+    """
+    Validate whether field is instance of type ``dict``.
+    """
+
+    def __setup__(self, types=(dict,), required_keys=UNSET):
+        Type.__setup__(self, types)
+        self.required_keys = required_keys
+
+    def validate(self, instance, value):
+        Type.validate(self, instance, value)
+        if self.required_keys is not UNSET and not all(key in value for key in self.required_keys):
+            raise ValidationError(
+                f"Missing required keys for value in `{self.field_name}` field"
+            )
+
+
+class Tuple(Type):
+    """
+    Validate whether field is instance of type ``tuple``.
+    """
+
+    def __setup__(self, types=(tuple,)):
         Type.__setup__(self, types)
 
 
@@ -131,3 +193,19 @@ class LazyLoad(BaseValidator):
         if value is not UNSET:
             raise RuntimeError(f"`{self.field_name}` is a `LazyLoad` field, you're not allowed to set it directly")
         return self.factory(instance)
+
+
+for primitive in primitive_types:
+    try:
+        globals()[primitive.__name__]
+    except KeyError:
+        globals().update({
+            primitive.__name__: type(
+                primitive.__name__,
+                (Type,),
+                {
+                    "__setup__": lambda self, types=(primitive,): Type.__setup__(self, types),
+                    "__doc__": f"Check whether field supports ``collections.abc.{primitive.__name__}`` interface."
+                }
+            )
+        })

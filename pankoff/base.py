@@ -313,7 +313,8 @@ class BaseValidator(_Descriptor, metaclass=ExtendedABCMeta):
                     if ret is not None:
                         value = ret
                 except ValidationError as exc:
-                    errors.append(str(exc))
+                    if str(exc) not in errors:
+                        errors.append(str(exc))
                 except Exception:
                     _invalidate_call_cache(self, target="validate")
                     raise
